@@ -3,25 +3,26 @@ import create_complex_plane as ccp
 from PIL import Image as im
 from widgets import *
 from math import cos
+import tkinter as tk
+from pathlib import Path
+import os
 
 def is_in_mandelbrot(c, tot_iter):
-    zpos = 0
+    z = 0+0j
     if abs(c-0.2)<0.45-0.45*cos(np.angle(c-0.2)) or (c.real+1)**2+c.imag**2<0.04:
         return 0
     for x in range(tot_iter):
-        zpos=zpos**2+c
-        if abs(zpos) > 2:
+        z=z**2+c
+        if z.real**2+z.imag**2>4:
             return round(255-x*(255/tot_iter))
-    if abs(zpos) < 2:
-        return 0
+    return 0
 
-def is_in_julia(zpos, tot_iter, c):
+def is_in_julia(z, tot_iter, c):
     for x in range(tot_iter):
-        zpos=zpos**2+c
-        if abs(zpos) > 4:
+        z=z**2+c
+        if z.real()**2+z.imag()**2>4:
             return round(255-x*(255/tot_iter))
-    if abs(zpos) < 4:
-        return 0
+    return 0
 
 def create_mandelbrot(stepsize=0.001, minpoint=-2-1j, maxpoint=0.5+1j, iterations=100, is_julia=False, c=0):
     clock_start()
@@ -44,8 +45,30 @@ def create_mandelbrot(stepsize=0.001, minpoint=-2-1j, maxpoint=0.5+1j, iteration
                 except TypeError:
                     output[x, y]=0
     clock_end()
-    img = im.fromarray(output, "L")
-    img.show()
+    return output
+
+def image_convert(array, mode="d"):
+    if array.dtype=="uint8":
+        img = im.fromarray(array, "L")
+    if mode=="d":
+        img.show()
+    if mode=="s":
+        def save():
+            name = (entry.get() + ".png")
+            path = (os.path.expanduser("~") + "/Desktop/" + name)
+            os.system("touch " + path)
+            img.save(fp=path)
+            window.destroy()
+        window = tk.Tk(screenName="Save image")
+        label = tk.Label(text="Save to desktop as:", borderwidth=10)
+        entry = tk.Entry()
+        button = tk.Button(text="Save", command=save, borderwidth=10)
+        label.pack()
+        entry.pack()
+        button.pack()
+        window.mainloop()
+
+    
 
 # create_mandelbrot(0.000000025, -0.98966+0.25242j, -0.98939+0.25258j, iterations=300) looks nice
 # create_mandelbrot(0.0000000025, -1.044695257-0.246678932j, -1.044693493-0.246677618j, 1500) like bro

@@ -1,10 +1,10 @@
 Main todo schedule
-0.  Create GUI
-0.1 Add base mandelbrot explorer
-0.2 Add other fractal options
-0.3 Add image saving, misc QoL
-0.4 Optimize - multiprocessing?
-0.5 Stress-test and bug-fix
+0.0 - Create GUI
+0.1 - Add base mandelbrot explorer
+0.2 - Add other fractal options
+0.3 - Add image saving, misc QoL
+0.4 - Optimize - multiprocessing?
+0.5 - Stress-test and bug-fix
 
 Misc features to add
 - Colors
